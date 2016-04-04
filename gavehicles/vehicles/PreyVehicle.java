@@ -3,6 +3,7 @@ package gavehicles.vehicles;
 import gavehicles.abstracts.AbstractDriveOutput;
 import gavehicles.abstracts.AbstractSensor;
 import gavehicles.abstracts.IndividualVehicle;
+import gavehicles.classes.PreyTraitDeterminer;
 import gavehicles.interfaces.Evaluable;
 import gavehicles.interfaces.Viewable;
 import java.awt.Color;
@@ -10,7 +11,9 @@ import java.awt.Graphics;
 import java.awt.geom.Point2D;
 
 public class PreyVehicle extends IndividualVehicle {
-
+    
+    int herding, poisonous, dangerSense;
+    
     public PreyVehicle() {
         super();
     }
@@ -28,8 +31,8 @@ public class PreyVehicle extends IndividualVehicle {
     public AbstractDriveOutput generateOutput(Viewable world) {
         PreyDriveOutput returnMe = new PreyDriveOutput();
 
-        double right = world.getPreyStimulusStrength(rightSensorLocation());
-        double left = world.getPreyStimulusStrength(leftSensorLocation());
+        double right = world.getPreyStimulusStrength(rightSensorLocation(), this);
+        double left = world.getPreyStimulusStrength(leftSensorLocation(), this);
 
         if (sensors.size() > 1) {
             System.out.println("okay... time to generalize PreyVehicle:step to sum all the drives!!");
@@ -66,17 +69,22 @@ public class PreyVehicle extends IndividualVehicle {
 
     @Override
     public String toString() {
-        return "PreyVehicle: location = " + getLocation() + " orientation = " + getOrientation();
+        String returnMe = "PreyVehicle: location = " + getLocation() + " orientation = " + getOrientation() + "\n";
+        for (byte next : DNA) {
+            returnMe += next;
+        } 
+        return returnMe;
     }
 
     @Override
     public void determineTraits() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println("PreyVehicle:determineTraits");
+        PreyTraitDeterminer.determine(this);
     }
 
     @Override
     public byte[] getDNA() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       return DNA;
     }
 
     @Override

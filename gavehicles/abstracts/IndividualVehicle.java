@@ -9,15 +9,16 @@ import java.awt.geom.Point2D;
 
 public abstract class IndividualVehicle implements Evaluable {
 
-    protected byte[] DNA;
-    protected int fitness;
+    public byte[] DNA;
+    public int fitness;
 
-    protected Point2D.Double location;
-    protected double orientation;
-    protected double velocity;
-    protected SensorList sensors;
-    protected int size = 30;
-    protected double maxSpeed = 3;
+    public Point2D.Double location;
+    public double orientation;
+    public double velocity;
+    public SensorList sensors;
+    public int size = 30;
+    public double maxSpeed = 5.0;
+    public double baseSpeed = 1.0;
 
     public IndividualVehicle() {
         sensors = new SensorList();

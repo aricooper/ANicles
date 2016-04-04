@@ -1,6 +1,6 @@
 package gavehicles.abstracts;
 
-public class AbstractDriveOutput {
+public abstract class AbstractDriveOutput {
 
     static final int MAX_OUTPUT = 10;
     protected double leftWheelOutput;

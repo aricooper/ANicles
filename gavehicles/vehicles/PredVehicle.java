@@ -10,11 +10,12 @@ import java.awt.Graphics;
 import java.awt.geom.Point2D;
 
 public class PredVehicle extends IndividualVehicle {
-
-    int baseSpeed = 3;
+    
+    int preySense, foodSense;
     
     public PredVehicle() {
         super();
+        this.maxSpeed = 8;
     }
 
     public PredVehicle(Point2D.Double location, double orientation, boolean crossed) {
@@ -50,8 +51,8 @@ public class PredVehicle extends IndividualVehicle {
     public AbstractDriveOutput generateOutput(Viewable world) {
         PredDriveOutput returnMe = new PredDriveOutput();
 
-        double right = world.getPreyStimulusStrength(rightSensorLocation());
-        double left = world.getPreyStimulusStrength(leftSensorLocation());
+        double right = world.getPredStimulusStrength(rightSensorLocation(), this);
+        double left = world.getPredStimulusStrength(leftSensorLocation(), this);
 
         if (sensors.size() > 1) {
             System.out.println("okay... time to generalize PredVehicle:step to sum all the drives!!");

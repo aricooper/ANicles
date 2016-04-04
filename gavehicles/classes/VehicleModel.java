@@ -7,9 +7,13 @@ import gavehicles.interfaces.Viewable;
 import java.awt.Graphics;
 import java.awt.geom.Point2D;
 import gavehicles.lists.SourceList;
+import gavehicles.vehicles.PredVehicle;
+import gavehicles.vehicles.PreyVehicle;
 
 public class VehicleModel implements Modelable {
 
+//    PreyVehicle myPrey;
+    
     int time;
     Population preyPop, predPop;
     SourceList foodSources;
@@ -22,6 +26,9 @@ public class VehicleModel implements Modelable {
 
     public VehicleModel(Viewable v) {
         theWorld = v;
+//        myPrey = new PreyVehicle(new Point2D.Double(Utilities.randomInt(Utilities.getWidth()), Utilities.randomInt(Utilities.getHeight())), Utilities.randomDouble(2) * Math.PI, true);
+//        myPrey.determineTraits();
+//        System.out.println("myPrey = " + myPrey);
         initPop();
         initSources();
     }
@@ -33,8 +40,8 @@ public class VehicleModel implements Modelable {
 
     private void initSources() {
         foodSources = new SourceList();
-        for (int i = 0; i < 2; i++) {
-            foodSources.add(new FoodSource(new Point2D.Double(Utilities.randomInt(800), Utilities.randomInt(600)), 5000));
+        for (int i = 0; i < Utilities.getFood(); i++) {
+            foodSources.add(new FoodSource(new Point2D.Double(Utilities.randomInt(Utilities.getWidth()), Utilities.randomInt(Utilities.getHeight())), 6000));
         }
     }
 
@@ -85,10 +92,11 @@ public class VehicleModel implements Modelable {
         foodSources.paint(g);
         preyPop.paint(g);
         predPop.paint(g);
+//        myPrey.paint(g);
     }
 
     @Override
-    public double getPreyStimulusStrength(Point2D.Double location) {
+    public double getPreyStimulusStrength(Point2D.Double location, PreyVehicle v) {
         double sum = 0;
 
         for (AbstractSource nextSource : foodSources) {
@@ -100,19 +108,24 @@ public class VehicleModel implements Modelable {
             double d = location.distance(nextVeh.getLocation());
             sum += 700 / (d * d);
         }
+        
+        for (Evaluable nextVeh : predPop) {
+            double d = location.distance(nextVeh.getLocation());
+            sum -= 15000 / (d * d);
+        }
 
         return sum;
     }
 
     @Override
-    public double getPredStimulusStrength(Point2D.Double location) {
+    public double getPredStimulusStrength(Point2D.Double location, PredVehicle v) {
         double sum = 0;
 
-        for (AbstractSource nextSource : foodSources) {
-            double d = location.distance(nextSource.getLocation());
-            sum += nextSource.getIntensity() / (d * d);
+        for (Evaluable nextVeh : preyPop) {
+            double d = location.distance(nextVeh.getLocation());
+            sum += 15000 / (d * d);
         }
-
+        
         return sum;
     }
 
