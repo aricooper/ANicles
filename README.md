@@ -1,3 +1,4 @@
 # ANicles
 
-Ideas:
+Goals:
+Vehicles having multiple sensors/summed drive outputs
