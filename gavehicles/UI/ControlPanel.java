@@ -1,6 +1,7 @@
 package gavehicles.UI;
 
-import gavehicles.interfaces.Controller;
+import gavehicles.classes.Controller;
+import gavehicles.classes.Utilities;
 
 public class ControlPanel extends javax.swing.JFrame {
 
@@ -8,7 +9,7 @@ public class ControlPanel extends javax.swing.JFrame {
     
     public ControlPanel() {
         initComponents();
-        setBounds(1200,0,200,400);
+        setBounds(Utilities.getWidth(),0,200,400);
         setTitle("Controls");
         setVisible(true);
     }

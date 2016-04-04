@@ -13,20 +13,18 @@ public class Population extends EvaluableList {
 
     Viewable theWorld;
     EvaluableList matingPool, nextGen;
-    int preySize = 8;
-    int predSize = 0;
 
     public Population() {
     }
 
     public Population(boolean pred) {
         if (pred) {
-            for (int i = 0; i < predSize; i++) {
-                this.add(new PredVehicle(new Point2D.Double(Utilities.randomInt(1200), Utilities.randomInt(800)), Utilities.randomDouble(2) * Math.PI, false));
+            for (int i = 0; i < Utilities.getPredSize(); i++) {
+                this.add(new PredVehicle(new Point2D.Double(Utilities.randomInt(Utilities.getWidth()), Utilities.randomInt(Utilities.getHeight())), Utilities.randomDouble(2) * Math.PI, false));
             }
         } else {
-            for (int i = 0; i < preySize; i++) {
-                this.add(new PreyVehicle(new Point2D.Double(Utilities.randomInt(1200), Utilities.randomInt(800)), Utilities.randomDouble(2) * Math.PI, false));
+            for (int i = 0; i < Utilities.getPreySize(); i++) {
+                this.add(new PreyVehicle(new Point2D.Double(Utilities.randomInt(Utilities.getWidth()), Utilities.randomInt(Utilities.getHeight())), Utilities.randomDouble(2) * Math.PI, false));
             }
         }
     }
