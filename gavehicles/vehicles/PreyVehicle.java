@@ -49,7 +49,7 @@ public class PreyVehicle extends IndividualVehicle {
         //I think this should use the sensors to communicate with the world and get its corresponding StimulusStrength
         for (AbstractSensor nextSensor : sensors) {
             double right = nextSensor.getStimulusStrength(world, this, rightSensorLocation());
-            double left = nextSensor.getStimulusStrength(world, this, rightSensorLocation());
+            double left = nextSensor.getStimulusStrength(world, this, leftSensorLocation());
             if (nextSensor.getCrossed()) {
                 returnMe = (PreyDriveOutput) returnMe.combine(new PreyDriveOutput(right, left, this));  // backwards
             } else {
