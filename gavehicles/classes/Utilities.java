@@ -2,11 +2,20 @@ package gavehicles.classes;
 
 public class Utilities {
 
+    protected static boolean DEBUG = false;
+    
     protected static int frameW = 1200;
     protected static int frameH = 800;
     protected static int food = 15;
-    protected static int preySize = 10;
+    protected static int preySize = 1;
     protected static int predSize = 0;
+    protected static int genTime = 1000;
+    
+    public static void debug(String s) {
+        if (DEBUG) {
+            System.out.println(s);
+        }
+    }
     
     public static int randomInt(int max) {
         return (int) (Math.random() * max);
@@ -34,6 +43,10 @@ public class Utilities {
     
     public static int getPredSize() {
         return predSize;
+    }
+    
+    public static int getGenTime() {
+        return genTime;
     }
     
 }

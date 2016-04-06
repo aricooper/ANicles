@@ -37,14 +37,11 @@ public class PreyVehicle extends IndividualVehicle {
     @Override
     public AbstractDriveOutput generateOutput(Viewable world) {
         PreyDriveOutput returnMe = new PreyDriveOutput();
-
-//        double right = world.getPreyStimulusStrength(rightSensorLocation(), this);
-//        double left = world.getPreyStimulusStrength(leftSensorLocation(), this);
-
-        if (sensors.size() > 1) {
-            System.out.println("okay... time to generalize PreyVehicle:step to sum all the drives!!");
-            assert (false);
-        }
+        
+//        if (sensors.size() > 1) {
+//            System.out.println("okay... time to generalize PreyVehicle:step to sum all the drives!!");
+//            assert (false);
+//        }
         
         //I think this should use the sensors to communicate with the world and get its corresponding StimulusStrength
         for (AbstractSensor nextSensor : sensors) {
@@ -53,7 +50,7 @@ public class PreyVehicle extends IndividualVehicle {
             if (nextSensor.getCrossed()) {
                 returnMe = (PreyDriveOutput) returnMe.combine(new PreyDriveOutput(right, left, this));  // backwards
             } else {
-                returnMe = (PreyDriveOutput) returnMe.combine(new PreyDriveOutput(right, left, this));
+                returnMe = (PreyDriveOutput) returnMe.combine(new PreyDriveOutput(left, right, this));
             }
 
         }

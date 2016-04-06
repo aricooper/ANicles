@@ -1,13 +1,11 @@
 package gavehicles.classes;
 
 import gavehicles.UI.ControlPanel;
-import gavehicles.classes.VehicleModel;
 import gavehicles.interfaces.Modelable;
 import gavehicles.interfaces.Viewable;
 
 public class Controller extends Thread {
 
-    int genTime = 1000;
     int speed = 10;
 
     ControlPanel controls;
@@ -25,7 +23,7 @@ public class Controller extends Thread {
     public void run() {
         for (;;) {
             if (running) {
-                if (theModel.getT() < genTime) {
+                if (theModel.getT() < Utilities.getGenTime()) {
                     step();
                     delay();
                 } else {

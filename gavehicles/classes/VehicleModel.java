@@ -99,9 +99,9 @@ public class VehicleModel implements Modelable {
     public double getPreyStimulusStrength(Point2D.Double location, PreyVehicle v) {
         double sum = 0;
 
-        for (Evaluable nextVeh : preyPop) {
-            double d = location.distance(nextVeh.getLocation());
-            sum += 700 / (d * d);
+        for (AbstractSource nextSource : foodSources) {
+            double d = location.distance(nextSource.getLocation());
+            sum += nextSource.getIntensity() / (d * d);
         }
 
         return sum;
@@ -128,12 +128,12 @@ public class VehicleModel implements Modelable {
     @Override
     public double getFoodStimulusStrength(Point2D.Double location, IndividualVehicle v) {
         double sum = 0;
-        
+
         for (AbstractSource nextSource : foodSources) {
             double d = location.distance(nextSource.getLocation());
             sum += nextSource.getIntensity() / (d * d);
         }
-        
+
         return sum;
     }
 
