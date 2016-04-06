@@ -1,5 +1,6 @@
 package gavehicles.interfaces;
 
+import gavehicles.abstracts.IndividualVehicle;
 import gavehicles.vehicles.PredVehicle;
 import gavehicles.vehicles.PreyVehicle;
 import java.awt.Graphics;
@@ -24,5 +25,7 @@ public interface Modelable {
     public double getPredStimulusStrength(Point2D.Double sensorLocation, PredVehicle v);
 
     public void completeGeneration();
+
+    public double getFoodStimulusStrength(Point2D.Double sensorLocation, IndividualVehicle v);
     
 }

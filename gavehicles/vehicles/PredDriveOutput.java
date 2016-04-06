@@ -31,4 +31,14 @@ public class PredDriveOutput extends AbstractDriveOutput {
         return "myD" + super.toString();
     }
 
+    @Override
+    public AbstractDriveOutput combine(AbstractDriveOutput o) {
+        PredDriveOutput returnMe = new PredDriveOutput();
+        double left = o.getLeftWheelOutput() + this.getLeftWheelOutput();
+        double right = o.getRightWheelOutput() + this.getRightWheelOutput();
+        returnMe.setLeftWheelOutput(left);
+        returnMe.setRightWheelOutput(right);
+        return returnMe;
+    }
+
 }

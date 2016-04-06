@@ -6,7 +6,7 @@ public class Utilities {
     protected static int frameH = 800;
     protected static int food = 15;
     protected static int preySize = 10;
-    protected static int predSize = 3;
+    protected static int predSize = 0;
     
     public static int randomInt(int max) {
         return (int) (Math.random() * max);

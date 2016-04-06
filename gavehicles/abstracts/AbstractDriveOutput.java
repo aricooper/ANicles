@@ -32,7 +32,10 @@ public abstract class AbstractDriveOutput {
             rightWheelOutput = nuRightWheelOutput;
         }
     }
+    
+    public abstract AbstractDriveOutput combine(AbstractDriveOutput o);
 
+    @Override
     public String toString() {
         String returnMe = "I am a DO: ";
         returnMe += "\tleft=" + leftWheelOutput;

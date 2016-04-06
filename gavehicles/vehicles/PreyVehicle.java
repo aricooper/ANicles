@@ -11,9 +11,9 @@ import java.awt.Graphics;
 import java.awt.geom.Point2D;
 
 public class PreyVehicle extends IndividualVehicle {
-    
+
     int herding, poisonous, dangerSense;
-    
+
     public PreyVehicle() {
         super();
     }
@@ -22,28 +22,38 @@ public class PreyVehicle extends IndividualVehicle {
         this();
         this.location = location;
         this.orientation = orientation;
+        setupSensors(crossed);
+    }
+
+    private void setupSensors(boolean crossed) {
         FoodSensor foodSensor = new FoodSensor();
         foodSensor.setCrossed(crossed);
         addSensor(foodSensor);
+//        PreySensor preySensor = new PreySensor();
+//        preySensor.setCrossed(crossed);
+//        addSensor(preySensor);
     }
 
     @Override
     public AbstractDriveOutput generateOutput(Viewable world) {
         PreyDriveOutput returnMe = new PreyDriveOutput();
 
-        double right = world.getPreyStimulusStrength(rightSensorLocation(), this);
-        double left = world.getPreyStimulusStrength(leftSensorLocation(), this);
+//        double right = world.getPreyStimulusStrength(rightSensorLocation(), this);
+//        double left = world.getPreyStimulusStrength(leftSensorLocation(), this);
 
         if (sensors.size() > 1) {
             System.out.println("okay... time to generalize PreyVehicle:step to sum all the drives!!");
             assert (false);
         }
-
+        
+        //I think this should use the sensors to communicate with the world and get its corresponding StimulusStrength
         for (AbstractSensor nextSensor : sensors) {
+            double right = nextSensor.getStimulusStrength(world, this, rightSensorLocation());
+            double left = nextSensor.getStimulusStrength(world, this, rightSensorLocation());
             if (nextSensor.getCrossed()) {
-                returnMe = new PreyDriveOutput(right, left, this);  // backwards
+                returnMe = (PreyDriveOutput) returnMe.combine(new PreyDriveOutput(right, left, this));  // backwards
             } else {
-                returnMe = new PreyDriveOutput(left, right, this);
+                returnMe = (PreyDriveOutput) returnMe.combine(new PreyDriveOutput(right, left, this));
             }
 
         }
@@ -51,14 +61,14 @@ public class PreyVehicle extends IndividualVehicle {
     }
 
     private Point2D.Double rightSensorLocation() {
-        double dx = getSize()/2 * Math.cos(getOrientation() - Math.PI / 4);
-        double dy = -getSize()/2 * Math.sin(getOrientation() - Math.PI / 4);
+        double dx = getSize() / 2 * Math.cos(getOrientation() - Math.PI / 4);
+        double dy = -getSize() / 2 * Math.sin(getOrientation() - Math.PI / 4);
         return new Point2D.Double(getX() + dx * 2, getY() + dy * 2);
     }
 
     private Point2D.Double leftSensorLocation() {
-        double dx = getSize()/2 * Math.cos(getOrientation() + Math.PI / 4);
-        double dy = -getSize()/2 * Math.sin(getOrientation() + Math.PI / 4);
+        double dx = getSize() / 2 * Math.cos(getOrientation() + Math.PI / 4);
+        double dy = -getSize() / 2 * Math.sin(getOrientation() + Math.PI / 4);
         return new Point2D.Double(getX() + dx * 2, getY() + dy * 2);
     }
 
@@ -72,7 +82,7 @@ public class PreyVehicle extends IndividualVehicle {
         String returnMe = "PreyVehicle: location = " + getLocation() + " orientation = " + getOrientation() + "\n";
         for (byte next : DNA) {
             returnMe += next;
-        } 
+        }
         return returnMe;
     }
 
@@ -84,7 +94,7 @@ public class PreyVehicle extends IndividualVehicle {
 
     @Override
     public byte[] getDNA() {
-       return DNA;
+        return DNA;
     }
 
     @Override

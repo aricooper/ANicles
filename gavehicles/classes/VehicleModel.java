@@ -1,6 +1,7 @@
 package gavehicles.classes;
 
 import gavehicles.abstracts.AbstractSource;
+import gavehicles.abstracts.IndividualVehicle;
 import gavehicles.interfaces.Evaluable;
 import gavehicles.interfaces.Modelable;
 import gavehicles.interfaces.Viewable;
@@ -13,7 +14,6 @@ import gavehicles.vehicles.PreyVehicle;
 public class VehicleModel implements Modelable {
 
 //    PreyVehicle myPrey;
-    
     int time;
     Population preyPop, predPop;
     SourceList foodSources;
@@ -99,19 +99,9 @@ public class VehicleModel implements Modelable {
     public double getPreyStimulusStrength(Point2D.Double location, PreyVehicle v) {
         double sum = 0;
 
-        for (AbstractSource nextSource : foodSources) {
-            double d = location.distance(nextSource.getLocation());
-            sum += nextSource.getIntensity() / (d * d);
-        }
-
         for (Evaluable nextVeh : preyPop) {
             double d = location.distance(nextVeh.getLocation());
             sum += 700 / (d * d);
-        }
-        
-        for (Evaluable nextVeh : predPop) {
-            double d = location.distance(nextVeh.getLocation());
-            sum -= 15000 / (d * d);
         }
 
         return sum;
@@ -125,7 +115,7 @@ public class VehicleModel implements Modelable {
             double d = location.distance(nextVeh.getLocation());
             sum += 15000 / (d * d);
         }
-        
+
         return sum;
     }
 
@@ -133,6 +123,18 @@ public class VehicleModel implements Modelable {
     public void completeGeneration() {
         doAGeneration();
         time = 0;
+    }
+
+    @Override
+    public double getFoodStimulusStrength(Point2D.Double location, IndividualVehicle v) {
+        double sum = 0;
+        
+        for (AbstractSource nextSource : foodSources) {
+            double d = location.distance(nextSource.getLocation());
+            sum += nextSource.getIntensity() / (d * d);
+        }
+        
+        return sum;
     }
 
 }

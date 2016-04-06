@@ -1,5 +1,6 @@
 package gavehicles.UI;
 
+import gavehicles.abstracts.IndividualVehicle;
 import gavehicles.classes.Controller;
 import gavehicles.interfaces.Modelable;
 import gavehicles.interfaces.Viewable;
@@ -64,5 +65,10 @@ public class MyPanel extends javax.swing.JPanel implements Viewable {
     @Override
     public double getPredStimulusStrength(Point2D.Double sensorLocation, PredVehicle v) {
         return theModel.getPredStimulusStrength(sensorLocation, v);
+    }
+
+    @Override
+    public double getFoodStimulusStrength(IndividualVehicle v, Point2D.Double sensorLocation) {
+        return theModel.getFoodStimulusStrength(sensorLocation, v);
     }
 }
