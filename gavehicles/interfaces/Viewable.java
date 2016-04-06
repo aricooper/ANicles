@@ -15,4 +15,6 @@ public interface Viewable {
 
     public double getFoodStimulusStrength(IndividualVehicle v, Point2D.Double sensorLocation);
 
+    public double getPreyStimulusStrength(IndividualVehicle v, Point2D.Double sensorLocation);
+
 }

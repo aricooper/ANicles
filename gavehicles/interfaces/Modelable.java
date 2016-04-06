@@ -2,7 +2,6 @@ package gavehicles.interfaces;
 
 import gavehicles.abstracts.IndividualVehicle;
 import gavehicles.vehicles.PredVehicle;
-import gavehicles.vehicles.PreyVehicle;
 import java.awt.Graphics;
 import java.awt.geom.Point2D;
 
@@ -18,7 +17,7 @@ public interface Modelable {
 
     public void finish();
 
-    public double getPreyStimulusStrength(Point2D.Double sensorLocation, PreyVehicle v);
+    public double getPreyStimulusStrength(Point2D.Double sensorLocation, IndividualVehicle v);
 
     public void reset();
 

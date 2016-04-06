@@ -9,7 +9,6 @@ import java.awt.Graphics;
 import java.awt.geom.Point2D;
 import gavehicles.lists.SourceList;
 import gavehicles.vehicles.PredVehicle;
-import gavehicles.vehicles.PreyVehicle;
 
 public class VehicleModel implements Modelable {
 
@@ -92,16 +91,15 @@ public class VehicleModel implements Modelable {
         foodSources.paint(g);
         preyPop.paint(g);
         predPop.paint(g);
-//        myPrey.paint(g);
     }
 
     @Override
-    public double getPreyStimulusStrength(Point2D.Double location, PreyVehicle v) {
+    public double getPreyStimulusStrength(Point2D.Double location, IndividualVehicle v) {
         double sum = 0;
 
-        for (AbstractSource nextSource : foodSources) {
-            double d = location.distance(nextSource.getLocation());
-            sum += nextSource.getIntensity() / (d * d);
+        for (Evaluable nextVeh : preyPop) {
+            double d = location.distance(nextVeh.getLocation());
+            sum += 4000 / (d * d);
         }
 
         return sum;

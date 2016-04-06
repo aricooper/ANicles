@@ -71,4 +71,9 @@ public class MyPanel extends javax.swing.JPanel implements Viewable {
     public double getFoodStimulusStrength(IndividualVehicle v, Point2D.Double sensorLocation) {
         return theModel.getFoodStimulusStrength(sensorLocation, v);
     }
+
+    @Override
+    public double getPreyStimulusStrength(IndividualVehicle v, Point2D.Double sensorLocation) {
+        return theModel.getPreyStimulusStrength(sensorLocation, v);
+    }
 }

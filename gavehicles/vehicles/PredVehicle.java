@@ -49,7 +49,7 @@ public class PredVehicle extends IndividualVehicle {
 
     @Override
     public AbstractDriveOutput generateOutput(Viewable world) {
-        PredDriveOutput returnMe = new PredDriveOutput();
+        AggressiveDriveOutput returnMe = new AggressiveDriveOutput();
 
         double right = world.getPredStimulusStrength(rightSensorLocation(), this);
         double left = world.getPredStimulusStrength(leftSensorLocation(), this);
@@ -61,9 +61,9 @@ public class PredVehicle extends IndividualVehicle {
 
         for (AbstractSensor nextSensor : sensors) {
             if (nextSensor.getCrossed()) {
-                returnMe = new PredDriveOutput(right, left, this);  // backwards
+                returnMe = new AggressiveDriveOutput(right, left, this);  // backwards
             } else {
-                returnMe = new PredDriveOutput(left, right, this);
+                returnMe = new AggressiveDriveOutput(left, right, this);
             }
 
         }

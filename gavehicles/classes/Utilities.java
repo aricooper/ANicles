@@ -7,7 +7,7 @@ public class Utilities {
     protected static int frameW = 1200;
     protected static int frameH = 800;
     protected static int food = 15;
-    protected static int preySize = 1;
+    protected static int preySize = 10;
     protected static int predSize = 0;
     protected static int genTime = 1000;
     

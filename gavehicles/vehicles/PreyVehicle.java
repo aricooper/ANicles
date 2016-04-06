@@ -29,28 +29,27 @@ public class PreyVehicle extends IndividualVehicle {
         FoodSensor foodSensor = new FoodSensor();
         foodSensor.setCrossed(crossed);
         addSensor(foodSensor);
-//        PreySensor preySensor = new PreySensor();
-//        preySensor.setCrossed(crossed);
-//        addSensor(preySensor);
+        PreySensor preySensor = new PreySensor();
+        preySensor.setCrossed(crossed);
+        addSensor(preySensor);
     }
 
     @Override
     public AbstractDriveOutput generateOutput(Viewable world) {
-        PreyDriveOutput returnMe = new PreyDriveOutput();
+        AbstractDriveOutput returnMe = new PassiveDriveOutput();
         
 //        if (sensors.size() > 1) {
 //            System.out.println("okay... time to generalize PreyVehicle:step to sum all the drives!!");
 //            assert (false);
 //        }
         
-        //I think this should use the sensors to communicate with the world and get its corresponding StimulusStrength
         for (AbstractSensor nextSensor : sensors) {
             double right = nextSensor.getStimulusStrength(world, this, rightSensorLocation());
             double left = nextSensor.getStimulusStrength(world, this, leftSensorLocation());
             if (nextSensor.getCrossed()) {
-                returnMe = (PreyDriveOutput) returnMe.combine(new PreyDriveOutput(right, left, this));  // backwards
+                returnMe = returnMe.combine(new PassiveDriveOutput(right, left, this), this);  // backwards
             } else {
-                returnMe = (PreyDriveOutput) returnMe.combine(new PreyDriveOutput(left, right, this));
+                returnMe = returnMe.combine(new PassiveDriveOutput(left, right, this), this);
             }
 
         }

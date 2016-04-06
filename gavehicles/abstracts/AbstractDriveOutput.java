@@ -33,7 +33,7 @@ public abstract class AbstractDriveOutput {
         }
     }
     
-    public abstract AbstractDriveOutput combine(AbstractDriveOutput o);
+    public abstract AbstractDriveOutput combine(AbstractDriveOutput o, IndividualVehicle v);
 
     @Override
     public String toString() {

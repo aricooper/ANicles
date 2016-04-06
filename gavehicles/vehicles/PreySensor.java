@@ -14,7 +14,7 @@ public class PreySensor extends AbstractSensor {
 
     @Override
     public double getStimulusStrength(Viewable world, IndividualVehicle v, Point2D.Double sensorLocation) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return world.getPreyStimulusStrength(v, sensorLocation);
     }
 
 }
