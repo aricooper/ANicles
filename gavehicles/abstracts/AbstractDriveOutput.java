@@ -1,10 +1,19 @@
 package gavehicles.abstracts;
 
+/*
+
+ crossed sensor + aggressive = attack the stimulus
+ crossed + passive = admires the stimulus, then leaves
+ uncrossed sensor + aggressive = run away from stimulus
+ uncrossed + passive = attracted to the stimulus
+
+ */
 public abstract class AbstractDriveOutput {
 
     static final int MAX_OUTPUT = 10;
     protected double leftWheelOutput;
     protected double rightWheelOutput;
+    protected double acceleration;
 
     public AbstractDriveOutput() {
     }
@@ -15,6 +24,10 @@ public abstract class AbstractDriveOutput {
 
     public double getRightWheelOutput() {
         return rightWheelOutput;
+    }
+    
+    public double getAcceleration() {
+        return acceleration;
     }
 
     public void setLeftWheelOutput(double nuLeftWheelOutput) {
@@ -32,7 +45,14 @@ public abstract class AbstractDriveOutput {
             rightWheelOutput = nuRightWheelOutput;
         }
     }
+    
+    public void setAcceleration(double a) {
+        this.acceleration = a;
+    }
 
+    public abstract AbstractDriveOutput combine(AbstractDriveOutput o, IndividualVehicle v);
+
+    @Override
     public String toString() {
         String returnMe = "I am a DO: ";
         returnMe += "\tleft=" + leftWheelOutput;

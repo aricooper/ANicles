@@ -3,6 +3,7 @@ package gavehicles.vehicles;
 import gavehicles.abstracts.AbstractDriveOutput;
 import gavehicles.abstracts.AbstractSensor;
 import gavehicles.abstracts.IndividualVehicle;
+import gavehicles.classes.MyUtilities;
 import gavehicles.interfaces.Evaluable;
 import gavehicles.interfaces.Viewable;
 import java.awt.Color;
@@ -10,21 +11,32 @@ import java.awt.Graphics;
 import java.awt.geom.Point2D;
 
 public class PredVehicle extends IndividualVehicle {
-    
-    int preySense, foodSense;
-    
+
     public PredVehicle() {
         super();
-        this.maxSpeed = 8;
+        this.preySense = 15000;
+        this.predSense = MyUtilities.randomInt(3000);
     }
 
-    public PredVehicle(Point2D.Double location, double orientation, boolean crossed) {
+    public PredVehicle(Point2D.Double location, double orientation) {
         this();
         this.location = location;
         this.orientation = orientation;
-        PreySensor preySensor = new PreySensor();
-        preySensor.setCrossed(!crossed);
-        addSensor(preySensor);
+        setupSensors();
+    }
+
+    private void setupSensors() {
+//        FoodSensor foodSensor = new FoodSensor();
+//        foodSensor.setCrossed(false);
+//        addSensor(foodSensor);
+
+//        PreySensor preySensor = new PreySensor();
+//        preySensor.setCrossed(true);
+//        addSensor(preySensor);
+//
+//        PredSensor predSensor = new PredSensor();
+//        predSensor.setCrossed(false);
+//        addSensor(predSensor);
     }
 
     @Override
@@ -43,27 +55,16 @@ public class PredVehicle extends IndividualVehicle {
     }
 
     @Override
-    public double getMaxSpeed() {
-        return maxSpeed;
-    }
-
-    @Override
     public AbstractDriveOutput generateOutput(Viewable world) {
-        PredDriveOutput returnMe = new PredDriveOutput();
-
-        double right = world.getPredStimulusStrength(rightSensorLocation(), this);
-        double left = world.getPredStimulusStrength(leftSensorLocation(), this);
-
-        if (sensors.size() > 1) {
-            System.out.println("okay... time to generalize PredVehicle:step to sum all the drives!!");
-            assert (false);
-        }
+        AbstractDriveOutput returnMe = new AggressiveDriveOutput();
 
         for (AbstractSensor nextSensor : sensors) {
+            double right = nextSensor.getStimulusStrength(world, this, rightSensorLocation());
+            double left = nextSensor.getStimulusStrength(world, this, leftSensorLocation());
             if (nextSensor.getCrossed()) {
-                returnMe = new PredDriveOutput(right, left, this);  // backwards
+                returnMe = returnMe.combine(nextSensor.createDriveOutput(right, left, this), this); //crossed
             } else {
-                returnMe = new PredDriveOutput(left, right, this);
+                returnMe = returnMe.combine(nextSensor.createDriveOutput(left, right, this), this);
             }
 
         }
@@ -116,8 +117,23 @@ public class PredVehicle extends IndividualVehicle {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    double getBaseSpeed() {
-        return baseSpeed;
+    @Override
+    public void moveIt(AbstractDriveOutput theOutput) {
+        double leftOutput = theOutput.getLeftWheelOutput();
+        double rightOutput = theOutput.getRightWheelOutput();
+        double direction = this.getOrientation();
+
+        double distance = (leftOutput + rightOutput) / 2;
+        double dx = distance * Math.cos(direction);
+        double dy = -distance * Math.sin(direction);
+
+        double x = this.getLocation().getX();
+        double y = this.getLocation().getY();
+
+        this.setLocation(new Point2D.Double(x + dx, y + dy));
+
+        double deltaDirection = ((rightOutput - leftOutput) / this.getSize()) * (Math.PI / 8);
+        this.setOrientation(direction + deltaDirection);
     }
-    
+
 }

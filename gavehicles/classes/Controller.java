@@ -1,17 +1,15 @@
 package gavehicles.classes;
 
 import gavehicles.UI.ControlPanel;
-import gavehicles.classes.VehicleModel;
 import gavehicles.interfaces.Modelable;
 import gavehicles.interfaces.Viewable;
 
 public class Controller extends Thread {
 
-    int genTime = 1000;
     int speed = 10;
 
     ControlPanel controls;
-    private boolean running = false;
+    public boolean running, stepping = false;
     Viewable theView;
     Modelable theModel;
 
@@ -24,13 +22,14 @@ public class Controller extends Thread {
     @Override
     public void run() {
         for (;;) {
-            if (running) {
-                if (theModel.getT() < genTime) {
+            if (running || stepping) {
+                if (theModel.getT() < MyUtilities.getGenTime()) {
                     step();
                     delay();
                 } else {
                     completeGeneration();
                 }
+                stepping = false;
             }
             delay();
         }
@@ -45,6 +44,10 @@ public class Controller extends Thread {
 
     public void toggleRunning() {
         running = !running;
+    }
+
+    public void toggleStepping() {
+        stepping = !stepping;
     }
 
     private void step() {
@@ -74,5 +77,5 @@ public class Controller extends Thread {
         theModel.completeGeneration();
         theView.display();
     }
-    
+
 }

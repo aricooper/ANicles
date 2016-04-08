@@ -4,11 +4,11 @@ import gavehicles.interfaces.Evaluable;
 import gavehicles.vehicles.PreyVehicle;
 
 /*
- *  Written by Paul Schot
- *  Each int in traitValue represents one of the traits of a PreyVehicle
- *  traitValue[0] = dangerSense
- *  traitValue[1] = herding
- *  traitValue[2] = poisonous
+ Written by Paul Schot
+ Each int in traitValue represents one of the traits of a PreyVehicle
+ traitValue[0] = 
+ traitValue[1] = 
+ traitValue[2] = 
  */
 public class PreyTraitDeterminer {
 
