@@ -4,8 +4,6 @@ import gavehicles.abstracts.IndividualVehicle;
 import gavehicles.classes.Controller;
 import gavehicles.interfaces.Modelable;
 import gavehicles.interfaces.Viewable;
-import gavehicles.vehicles.PredVehicle;
-import gavehicles.vehicles.PreyVehicle;
 import java.awt.Graphics;
 import java.awt.geom.Point2D;
 
@@ -58,16 +56,6 @@ public class MyPanel extends javax.swing.JPanel implements Viewable {
     // End of variables declaration//GEN-END:variables
     
     @Override
-    public double getPreyStimulusStrength(Point2D.Double sensorLocation, PreyVehicle v) {
-        return theModel.getPreyStimulusStrength(sensorLocation, v);
-    }
-
-    @Override
-    public double getPredStimulusStrength(Point2D.Double sensorLocation, PredVehicle v) {
-        return theModel.getPredStimulusStrength(sensorLocation, v);
-    }
-
-    @Override
     public double getFoodStimulusStrength(IndividualVehicle v, Point2D.Double sensorLocation) {
         return theModel.getFoodStimulusStrength(sensorLocation, v);
     }
@@ -75,5 +63,10 @@ public class MyPanel extends javax.swing.JPanel implements Viewable {
     @Override
     public double getPreyStimulusStrength(IndividualVehicle v, Point2D.Double sensorLocation) {
         return theModel.getPreyStimulusStrength(sensorLocation, v);
+    }
+
+    @Override
+    public double getPredStimulusStrength(IndividualVehicle v, Point2D.Double sensorLocation) {
+       return theModel.getPredStimulusStrength(sensorLocation, v);
     }
 }

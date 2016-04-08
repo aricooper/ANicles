@@ -8,7 +8,7 @@ public class AggressiveDriveOutput extends AbstractDriveOutput {
     public AggressiveDriveOutput() {
     }
 
-    public AggressiveDriveOutput(double left, double right, PredVehicle v) {
+    public AggressiveDriveOutput(double left, double right, double strength, IndividualVehicle v) {
         double l = v.getBaseSpeed();
         double r = v.getBaseSpeed();
         double ml = v.getMaxSpeed();
@@ -24,7 +24,9 @@ public class AggressiveDriveOutput extends AbstractDriveOutput {
         } else {
             this.setRightWheelOutput(mr);
         }
-
+        
+        System.out.println("strength: " + strength);
+        setAcceleration(strength);
     }
 
     @Override
@@ -34,11 +36,19 @@ public class AggressiveDriveOutput extends AbstractDriveOutput {
 
     @Override
     public AbstractDriveOutput combine(AbstractDriveOutput o, IndividualVehicle v) {
-        AggressiveDriveOutput returnMe = new AggressiveDriveOutput();
+       AggressiveDriveOutput returnMe = new AggressiveDriveOutput();
         double left = o.getLeftWheelOutput() + this.getLeftWheelOutput();
         double right = o.getRightWheelOutput() + this.getRightWheelOutput();
-        returnMe.setLeftWheelOutput(left);
-        returnMe.setRightWheelOutput(right);
+        if (left > v.getMaxSpeed()) {
+            returnMe.setLeftWheelOutput(v.getMaxSpeed());
+        } else {
+            returnMe.setLeftWheelOutput(left);
+        }
+        if (right > v.getMaxSpeed()) {
+            returnMe.setRightWheelOutput(v.getMaxSpeed());
+        } else {
+            returnMe.setRightWheelOutput(right);
+        }
         return returnMe;
     }
 

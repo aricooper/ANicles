@@ -13,7 +13,6 @@ public interface Evaluable {
     }
 
     // Vehicle methods needed
-    
     public void paint(Graphics g);
 
     public double getOrientation();
@@ -29,9 +28,10 @@ public interface Evaluable {
     public AbstractDriveOutput generateOutput(Viewable theWorld);
 
     public void step(Viewable world);
-    
+
+    public void moveIt(AbstractDriveOutput theOutput);
+
     // Genetic Algorithm methods needed
-    
     public byte[] getDNA();
 
     public int getFitness();

@@ -8,7 +8,7 @@ public class PassiveDriveOutput extends AbstractDriveOutput {
     public PassiveDriveOutput() {
     }
 
-    public PassiveDriveOutput(double left, double right, PreyVehicle v) {
+    public PassiveDriveOutput(double left, double right, double strength, IndividualVehicle v) {
         double l = v.getMaxSpeed();
         double r = v.getMaxSpeed();
 
@@ -17,6 +17,8 @@ public class PassiveDriveOutput extends AbstractDriveOutput {
 
         this.setLeftWheelOutput(l);
         this.setRightWheelOutput(r);
+        System.out.println("strength: " + strength);
+        setAcceleration(strength);
     }
 
     // Method to sum different DriveOutputs.

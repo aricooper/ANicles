@@ -19,4 +19,6 @@ public abstract class AbstractSensor {
     
     abstract public String mySource();
 
+    public abstract AbstractDriveOutput createDriveOutput(double right, double left, IndividualVehicle v);
+
 }

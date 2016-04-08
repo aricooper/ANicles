@@ -1,12 +1,12 @@
 package gavehicles.UI;
 
-import gavehicles.classes.Utilities;
+import gavehicles.classes.MyUtilities;
 
 public class MyFrame extends javax.swing.JFrame {
 
     public MyFrame() {
         initComponents();
-        setBounds(0,0,Utilities.getWidth(),Utilities.getHeight());
+        setBounds(0,0,MyUtilities.getWidth(),MyUtilities.getHeight());
         setTitle("Genetic Algorithm Vehicles");
         add(new MyPanel(this));
         setVisible(true);

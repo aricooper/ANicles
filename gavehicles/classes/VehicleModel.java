@@ -8,11 +8,9 @@ import gavehicles.interfaces.Viewable;
 import java.awt.Graphics;
 import java.awt.geom.Point2D;
 import gavehicles.lists.SourceList;
-import gavehicles.vehicles.PredVehicle;
 
 public class VehicleModel implements Modelable {
 
-//    PreyVehicle myPrey;
     int time;
     Population preyPop, predPop;
     SourceList foodSources;
@@ -25,9 +23,6 @@ public class VehicleModel implements Modelable {
 
     public VehicleModel(Viewable v) {
         theWorld = v;
-//        myPrey = new PreyVehicle(new Point2D.Double(Utilities.randomInt(Utilities.getWidth()), Utilities.randomInt(Utilities.getHeight())), Utilities.randomDouble(2) * Math.PI, true);
-//        myPrey.determineTraits();
-//        System.out.println("myPrey = " + myPrey);
         initPop();
         initSources();
     }
@@ -39,8 +34,16 @@ public class VehicleModel implements Modelable {
 
     private void initSources() {
         foodSources = new SourceList();
-        for (int i = 0; i < Utilities.getFood(); i++) {
-            foodSources.add(new FoodSource(new Point2D.Double(Utilities.randomInt(Utilities.getWidth()), Utilities.randomInt(Utilities.getHeight())), 6000));
+        for (int i = 0; i < MyUtilities.getFood(); i++) {
+            foodSources.add(
+                    new FoodSource(
+                            new Point2D.Double(
+                                    MyUtilities.randomInt(MyUtilities.getWidth()),
+                                    MyUtilities.randomInt(MyUtilities.getHeight())
+                            ),
+                            MyUtilities.randomInt(5000, 10000)
+                    )
+            );
         }
     }
 
@@ -94,33 +97,34 @@ public class VehicleModel implements Modelable {
     }
 
     @Override
+    public void completeGeneration() {
+        doAGeneration();
+        time = 0;
+    }
+
+    @Override
     public double getPreyStimulusStrength(Point2D.Double location, IndividualVehicle v) {
         double sum = 0;
 
         for (Evaluable nextVeh : preyPop) {
             double d = location.distance(nextVeh.getLocation());
-            sum += 4000 / (d * d);
+            MyUtilities.debug("sum: " + (v.getPreySense() / (d * d)));
+            sum += v.getPreySense() / (d * d);
         }
 
         return sum;
     }
 
     @Override
-    public double getPredStimulusStrength(Point2D.Double location, PredVehicle v) {
+    public double getPredStimulusStrength(Point2D.Double location, IndividualVehicle v) {
         double sum = 0;
 
-        for (Evaluable nextVeh : preyPop) {
+        for (Evaluable nextVeh : predPop) {
             double d = location.distance(nextVeh.getLocation());
-            sum += 15000 / (d * d);
+            sum += v.getPredSense() / (d * d);
         }
 
         return sum;
-    }
-
-    @Override
-    public void completeGeneration() {
-        doAGeneration();
-        time = 0;
     }
 
     @Override
@@ -129,7 +133,7 @@ public class VehicleModel implements Modelable {
 
         for (AbstractSource nextSource : foodSources) {
             double d = location.distance(nextSource.getLocation());
-            sum += nextSource.getIntensity() / (d * d);
+            sum += nextSource.getIntensity() / (2.5 * (d * d));
         }
 
         return sum;

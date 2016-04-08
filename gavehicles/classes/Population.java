@@ -19,12 +19,12 @@ public class Population extends EvaluableList {
 
     public Population(boolean pred) {
         if (pred) {
-            for (int i = 0; i < Utilities.getPredSize(); i++) {
-                this.add(new PredVehicle(new Point2D.Double(Utilities.randomInt(Utilities.getWidth()), Utilities.randomInt(Utilities.getHeight())), Utilities.randomDouble(2) * Math.PI, false));
+            for (int i = 0; i < MyUtilities.getPredSize(); i++) {
+                this.add(new PredVehicle(new Point2D.Double(MyUtilities.randomInt(MyUtilities.getWidth()), MyUtilities.randomInt(MyUtilities.getHeight())), MyUtilities.randomDouble(2) * Math.PI));
             }
         } else {
-            for (int i = 0; i < Utilities.getPreySize(); i++) {
-                this.add(new PreyVehicle(new Point2D.Double(Utilities.randomInt(Utilities.getWidth()), Utilities.randomInt(Utilities.getHeight())), Utilities.randomDouble(2) * Math.PI, false));
+            for (int i = 0; i < MyUtilities.getPreySize(); i++) {
+                this.add(new PreyVehicle(new Point2D.Double(MyUtilities.randomInt(MyUtilities.getWidth()), MyUtilities.randomInt(MyUtilities.getHeight())), MyUtilities.randomDouble(2) * Math.PI));
             }
         }
     }
@@ -65,7 +65,8 @@ public class Population extends EvaluableList {
     public void update() {
         for (Evaluable nextVehicle : this) {
             AbstractDriveOutput theOutput = nextVehicle.generateOutput(theWorld);
-            moveIt(nextVehicle, theOutput);
+//            moveIt(nextVehicle, theOutput);
+            nextVehicle.moveIt(theOutput);
         }
     }
 
@@ -77,8 +78,10 @@ public class Population extends EvaluableList {
         double distance = (leftOutput + rightOutput) / 2;
         double dx = distance * Math.cos(direction);
         double dy = -distance * Math.sin(direction);
+        
         double x = theVehicle.getLocation().getX();
         double y = theVehicle.getLocation().getY();
+        
         theVehicle.setLocation(new Point2D.Double(x + dx, y + dy));
 
         double deltaDirection = ((rightOutput - leftOutput) / theVehicle.getSize()) * (Math.PI / 8);
