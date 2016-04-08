@@ -1,6 +1,6 @@
 package gavehicles.abstracts;
 
-import gavehicles.classes.MyUtilities;
+import gavehicles.classes.Utilities;
 import gavehicles.interfaces.Evaluable;
 import gavehicles.interfaces.Viewable;
 import gavehicles.lists.SensorList;
@@ -9,25 +9,22 @@ import java.awt.geom.Point2D;
 
 public abstract class IndividualVehicle implements Evaluable {
 
-    public byte[] DNA;
-    public int fitness;
-    
-    public int preySense, predSense, foodSense;
+    public boolean collision; // true == pred-ate prey, prey-ate source
+    protected byte[] DNA;
+    protected int fitness;
 
-    public Point2D.Double location;
-    public double orientation;
-    public double velocity;
-    public SensorList sensors;
-    public int size = 30;
-    public double maxSpeed = 8.0;
-    public double baseSpeed = 2.0;
-    public double vX, vY;
+    protected Point2D.Double location;
+    protected double orientation;
+    protected double velocity;
+    protected SensorList sensors;
+    protected int size = 30;
+    protected double maxSpeed = 3;
 
     public IndividualVehicle() {
         sensors = new SensorList();
         DNA = new byte[Evaluable.getLength()];
         for (int i = 0; i < Evaluable.getLength(); i++) {
-            DNA[i] = (byte) (MyUtilities.randomInt(2));
+            DNA[i] = (byte) (Utilities.randomInt(2));
         }
     }
 
@@ -96,20 +93,5 @@ public abstract class IndividualVehicle implements Evaluable {
         String returnMe = "I am an Individual:";
         return returnMe;
     }
-
-    public double getPreySense() {
-        return preySense;
-    }
-    
-    public double getPredSense() {
-        return predSense;
-    }
-
-    public double getBaseSpeed() {
-        return baseSpeed;
-    }
-    
-    @Override
-    public abstract void moveIt(AbstractDriveOutput theOutput);
 
 }

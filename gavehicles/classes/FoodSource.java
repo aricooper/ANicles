@@ -23,8 +23,6 @@ public class FoodSource extends AbstractSource {
         int y = (int) getLocation().getY();
         g.setColor(new Color(150, 200, 150));
         g.fillOval(x - offset, y - offset, width, width);
-        g.setColor(Color.BLACK);
-        g.drawString("" + this.getIntensity(), x, y);
     }
 
 }

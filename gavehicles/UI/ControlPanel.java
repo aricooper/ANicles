@@ -1,7 +1,6 @@
 package gavehicles.UI;
 
-import gavehicles.classes.Controller;
-import gavehicles.classes.MyUtilities;
+import gavehicles.interfaces.Controller;
 
 public class ControlPanel extends javax.swing.JFrame {
 
@@ -9,7 +8,7 @@ public class ControlPanel extends javax.swing.JFrame {
     
     public ControlPanel() {
         initComponents();
-        setBounds(MyUtilities.getWidth(),0,200,400);
+        setBounds(1200,0,200,400);
         setTitle("Controls");
         setVisible(true);
     }
@@ -25,7 +24,6 @@ public class ControlPanel extends javax.swing.JFrame {
 
         runButton = new javax.swing.JButton();
         resetButton = new javax.swing.JButton();
-        stepButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -43,33 +41,21 @@ public class ControlPanel extends javax.swing.JFrame {
             }
         });
 
-        stepButton.setText("STEP");
-        stepButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                stepButtonActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(232, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(resetButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(runButton))
-                    .addComponent(stepButton, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addComponent(resetButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(runButton)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 236, Short.MAX_VALUE)
-                .addComponent(stepButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(0, 271, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(runButton)
                     .addComponent(resetButton)))
@@ -85,11 +71,6 @@ public class ControlPanel extends javax.swing.JFrame {
     private void resetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetButtonActionPerformed
         theController.reset();
     }//GEN-LAST:event_resetButtonActionPerformed
-
-    private void stepButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stepButtonActionPerformed
-        theController.toggleStepping();
-        theController.running = false;
-    }//GEN-LAST:event_stepButtonActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -126,7 +107,6 @@ public class ControlPanel extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton resetButton;
     private javax.swing.JButton runButton;
-    private javax.swing.JButton stepButton;
     // End of variables declaration//GEN-END:variables
 
 }

@@ -13,18 +13,20 @@ public class Population extends EvaluableList {
 
     Viewable theWorld;
     EvaluableList matingPool, nextGen;
+    int preySize = 8;
+    int predSize = 8;
 
     public Population() {
     }
 
     public Population(boolean pred) {
         if (pred) {
-            for (int i = 0; i < MyUtilities.getPredSize(); i++) {
-                this.add(new PredVehicle(new Point2D.Double(MyUtilities.randomInt(MyUtilities.getWidth()), MyUtilities.randomInt(MyUtilities.getHeight())), MyUtilities.randomDouble(2) * Math.PI));
+            for (int i = 0; i < predSize; i++) {
+                this.add(new PredVehicle(new Point2D.Double(Utilities.randomInt(1200), Utilities.randomInt(800)), Utilities.randomDouble(2) * Math.PI, false));
             }
         } else {
-            for (int i = 0; i < MyUtilities.getPreySize(); i++) {
-                this.add(new PreyVehicle(new Point2D.Double(MyUtilities.randomInt(MyUtilities.getWidth()), MyUtilities.randomInt(MyUtilities.getHeight())), MyUtilities.randomDouble(2) * Math.PI));
+            for (int i = 0; i < preySize; i++) {
+                this.add(new PreyVehicle(new Point2D.Double(Utilities.randomInt(1200), Utilities.randomInt(800)), Utilities.randomDouble(2) * Math.PI, false));
             }
         }
     }
@@ -65,8 +67,7 @@ public class Population extends EvaluableList {
     public void update() {
         for (Evaluable nextVehicle : this) {
             AbstractDriveOutput theOutput = nextVehicle.generateOutput(theWorld);
-//            moveIt(nextVehicle, theOutput);
-            nextVehicle.moveIt(theOutput);
+            moveIt(nextVehicle, theOutput);
         }
     }
 
@@ -78,10 +79,8 @@ public class Population extends EvaluableList {
         double distance = (leftOutput + rightOutput) / 2;
         double dx = distance * Math.cos(direction);
         double dy = -distance * Math.sin(direction);
-        
         double x = theVehicle.getLocation().getX();
         double y = theVehicle.getLocation().getY();
-        
         theVehicle.setLocation(new Point2D.Double(x + dx, y + dy));
 
         double deltaDirection = ((rightOutput - leftOutput) / theVehicle.getSize()) * (Math.PI / 8);

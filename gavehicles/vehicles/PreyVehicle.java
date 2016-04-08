@@ -3,8 +3,7 @@ package gavehicles.vehicles;
 import gavehicles.abstracts.AbstractDriveOutput;
 import gavehicles.abstracts.AbstractSensor;
 import gavehicles.abstracts.IndividualVehicle;
-import gavehicles.classes.MyUtilities;
-import gavehicles.classes.PreyTraitDeterminer;
+import gavehicles.classes.PredTraitDeterminer;
 import gavehicles.interfaces.Evaluable;
 import gavehicles.interfaces.Viewable;
 import java.awt.Color;
@@ -12,49 +11,50 @@ import java.awt.Graphics;
 import java.awt.geom.Point2D;
 
 public class PreyVehicle extends IndividualVehicle {
+    
+    int FOOD_WEIGHT = 1;
+    int dangerSense, herding, poisonous;
 
     public PreyVehicle() {
         super();
-        this.preySense = MyUtilities.randomInt(3000);
-        this.predSense = 20000;
     }
 
-    public PreyVehicle(Point2D.Double location, double orientation) {
+    public PreyVehicle(int fit, byte[] dna) {
+        super();
+        fitness = fit;
+        this.DNA = dna;
+
+    }
+
+    public PreyVehicle(Point2D.Double location, double orientation, boolean crossed) {
         this();
         this.location = location;
         this.orientation = orientation;
-        setupSensors();
-    }
-
-    private void setupSensors() {
         FoodSensor foodSensor = new FoodSensor();
-        foodSensor.setCrossed(false);
+        foodSensor.setCrossed(crossed);
         addSensor(foodSensor);
-
-//        PreySensor preySensor = new PreySensor();
-//        preySensor.setCrossed(false);
-//        addSensor(preySensor);
-//
-//        PredSensor predSensor = new PredSensor();
-//        predSensor.setCrossed(false);
-//        addSensor(predSensor);
     }
 
     @Override
     public AbstractDriveOutput generateOutput(Viewable world) {
-        AbstractDriveOutput returnMe = new PassiveDriveOutput();
+        PreyDriveOutput returnMe = new PreyDriveOutput();
+
+        double right = world.getPreyStimulusStrength(rightSensorLocation());
+        double left = world.getPreyStimulusStrength(leftSensorLocation());
+
+        if (sensors.size() > 1) {
+            System.out.println("okay... time to generalize PreyVehicle:step to sum all the drives!!");
+            assert (false);
+        }
 
         for (AbstractSensor nextSensor : sensors) {
-            double right = nextSensor.getStimulusStrength(world, this, rightSensorLocation());
-            double left = nextSensor.getStimulusStrength(world, this, leftSensorLocation());
             if (nextSensor.getCrossed()) {
-                returnMe = returnMe.combine(nextSensor.createDriveOutput(right, left, this), this); //crossed
+                returnMe = new PreyDriveOutput(right, left, this);  // backwards
             } else {
-                returnMe = returnMe.combine(nextSensor.createDriveOutput(left, right, this), this);
+                returnMe = new PreyDriveOutput(left, right, this);
             }
+
         }
-        System.out.println("left:" + returnMe.getLeftWheelOutput());
-        System.out.println("right: " + returnMe.getRightWheelOutput());
         return returnMe;
     }
 
@@ -72,23 +72,20 @@ public class PreyVehicle extends IndividualVehicle {
 
     @Override
     public void step(Viewable world) {
-        // add to Individual's fitness
+        evaluateMyFitness();
     }
 
     @Override
     public String toString() {
-        String returnMe = "PreyVehicle: location = " + getLocation() + " orientation = " + getOrientation() + "\n";
-        for (byte next : DNA) {
-            returnMe += next;
-        }
-        return returnMe;
+        return "PreyVehicle: location = " + getLocation() + " orientation = " + getOrientation();
     }
 
     @Override
     public void determineTraits() {
-        System.out.println("PreyVehicle:determineTraits");
-        PreyTraitDeterminer.determine(this);
-    }
+    int[] traits = PredTraitDeterminer.getValue(this);
+        dangerSense = traits[0];
+        herding = traits[1];
+        poisonous = traits[2];    }
 
     @Override
     public byte[] getDNA() {
@@ -107,7 +104,8 @@ public class PreyVehicle extends IndividualVehicle {
 
     @Override
     public Evaluable myClone() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int fit = fitness;
+        return new PreyVehicle(fit, DNA.clone());
     }
 
     @Override
@@ -126,28 +124,18 @@ public class PreyVehicle extends IndividualVehicle {
     }
 
     @Override
-    public void moveIt(AbstractDriveOutput theOutput) {
-        double leftOutput = theOutput.getLeftWheelOutput();
-        double rightOutput = theOutput.getRightWheelOutput();
-        double direction = this.getOrientation();
+    public void setCollision(boolean b) {
+        collision = b;
+    }
 
-//        double distance = (leftOutput + rightOutput) / 2;
-//        double dx = distance * Math.cos(direction);
-//        double dy = -distance * Math.sin(direction);
+    private void evaluateMyFitness() {
+        if (eating()) {
+            fitness += FOOD_WEIGHT;
+        }
+    }
 
-        double x = this.getLocation().getX();
-        double y = this.getLocation().getY();
-        
-
-//        this.setLocation(new Point2D.Double(x + dx, y + dy));
-
-        double deltaDirection = ((rightOutput - leftOutput) / this.getSize()) * (Math.PI / 8);
-        this.setOrientation(direction + deltaDirection);
-        
-        vX += theOutput.getAcceleration() * Math.cos(direction);
-        vY += theOutput.getAcceleration() * Math.sin(direction);
-        
-        this.setLocation(new Point2D.Double(x + vX, y + vY));
+    private boolean eating() {
+        return collision;
     }
 
 }

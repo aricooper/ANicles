@@ -1,19 +1,28 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package gavehicles.classes;
 
+/**
+ *
+ * @author Ari
+ */
 import gavehicles.interfaces.Evaluable;
 import gavehicles.vehicles.PreyVehicle;
 
 /*
- Written by Paul Schot
- Each int in traitValue represents one of the traits of a PredVehicle
- traitValue[0] = 
- traitValue[1] = 
- traitValue[2] = 
+ *  Written by Paul Schot
+ *  Each int in traitValue represents one of the traits of a PreyVehicle
+ *  traitValue[0] = speed
+ *  traitValue[1] = appetite
+ *  traitValue[2] = sight
  */
 public class PredTraitDeterminer {
 
-    private static final int GENE_LENGTH = 8;
-    private static final int NUM_GENES = 5;
+    private static final int GENE_LENGTH = 3;
+    private static final int NUM_GENES = 3;
 
     private static final int[] traitValue = new int[NUM_GENES];
 
@@ -43,6 +52,11 @@ public class PredTraitDeterminer {
         for (int i = 0; i < NUM_GENES; i++) {
             traitValue[i] = evaluateGene(chromo, i);
         }
+    }
+
+    public static int[] getValue(Evaluable chromo) {
+        findGenes(chromo);
+        return traitValue;
     }
 
     @Override

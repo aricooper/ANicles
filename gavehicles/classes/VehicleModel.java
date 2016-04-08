@@ -1,7 +1,6 @@
 package gavehicles.classes;
 
 import gavehicles.abstracts.AbstractSource;
-import gavehicles.abstracts.IndividualVehicle;
 import gavehicles.interfaces.Evaluable;
 import gavehicles.interfaces.Modelable;
 import gavehicles.interfaces.Viewable;
@@ -34,16 +33,8 @@ public class VehicleModel implements Modelable {
 
     private void initSources() {
         foodSources = new SourceList();
-        for (int i = 0; i < MyUtilities.getFood(); i++) {
-            foodSources.add(
-                    new FoodSource(
-                            new Point2D.Double(
-                                    MyUtilities.randomInt(MyUtilities.getWidth()),
-                                    MyUtilities.randomInt(MyUtilities.getHeight())
-                            ),
-                            MyUtilities.randomInt(5000, 10000)
-                    )
-            );
+        for (int i = 0; i < 2; i++) {
+            foodSources.add(new FoodSource(new Point2D.Double(Utilities.randomInt(800), Utilities.randomInt(600)), 5000));
         }
     }
 
@@ -57,6 +48,7 @@ public class VehicleModel implements Modelable {
     @Override
     public void step() {
         time++;
+        checkForCollisions();
         evaluateFitness();
     }
 
@@ -97,46 +89,99 @@ public class VehicleModel implements Modelable {
     }
 
     @Override
+    public double getPreyStimulusStrength(Point2D.Double location) {
+        double sum = 0;
+
+        for (AbstractSource nextSource : foodSources) {
+            double d = location.distance(nextSource.getLocation());
+            sum += nextSource.getIntensity() / (d * d);
+        }
+
+        for (Evaluable nextVeh : preyPop) {
+            double d = location.distance(nextVeh.getLocation());
+            sum += 700 / (d * d);
+        }
+
+        return sum;
+    }
+
+    @Override
+    public double getPredStimulusStrength(Point2D.Double location) {
+        double sum = 0;
+
+        for (AbstractSource nextSource : foodSources) {
+            double d = location.distance(nextSource.getLocation());
+            sum += nextSource.getIntensity() / (d * d);
+        }
+
+        return sum;
+    }
+
+    @Override
     public void completeGeneration() {
         doAGeneration();
         time = 0;
     }
 
-    @Override
-    public double getPreyStimulusStrength(Point2D.Double location, IndividualVehicle v) {
-        double sum = 0;
+    private void checkForCollisions() {
+        checkForPredFood();
+        checkForPreyFood();
 
-        for (Evaluable nextVeh : preyPop) {
-            double d = location.distance(nextVeh.getLocation());
-            MyUtilities.debug("sum: " + (v.getPreySense() / (d * d)));
-            sum += v.getPreySense() / (d * d);
-        }
-
-        return sum;
     }
 
-    @Override
-    public double getPredStimulusStrength(Point2D.Double location, IndividualVehicle v) {
-        double sum = 0;
+    private boolean ate(Evaluable prey, Evaluable pred) {
+        double x = prey.getLocation().getX();
+        double y = prey.getLocation().getY();
 
-        for (Evaluable nextVeh : predPop) {
-            double d = location.distance(nextVeh.getLocation());
-            sum += v.getPredSense() / (d * d);
+        double x1 = pred.getLocation().getX();
+        double y1 = pred.getLocation().getY();
+
+        if (Math.abs(x - x1) <= 5) {
+            if (Math.abs(y - y1) <= 5) {
+                return true;
+            }
         }
-
-        return sum;
+        return false;
     }
 
-    @Override
-    public double getFoodStimulusStrength(Point2D.Double location, IndividualVehicle v) {
-        double sum = 0;
-
-        for (AbstractSource nextSource : foodSources) {
-            double d = location.distance(nextSource.getLocation());
-            sum += nextSource.getIntensity() / (2.5 * (d * d));
+    private void checkForPredFood() {
+        for (int i = 0; i < predPop.predSize; i++) {
+            if (ate(preyPop.get(i), predPop.get(i))) {
+                predPop.get(i).setCollision(true);
+            }
         }
+    }
 
-        return sum;
+    private void checkForPreyFood() {
+        for (int i = 0; i < preyPop.preySize; i++) {
+            if (feeding(preyPop.get(i), foodSources)) {
+                preyPop.get(i).setCollision(true);
+            }
+        }
+    }
+
+    private boolean feeding(Evaluable prey, SourceList foodSources) {
+        for (AbstractSource source : foodSources) {
+            if (ate(prey, source)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean ate(Evaluable prey, AbstractSource source) {
+        double x = prey.getLocation().getX();
+        double y = prey.getLocation().getY();
+
+        double x1 = source.getLocation().getX();
+        double y1 = source.getLocation().getY();
+
+        if (Math.abs(x - x1) <= 5) {
+            if (Math.abs(y - y1) <= 5) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

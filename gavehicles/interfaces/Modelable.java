@@ -1,11 +1,10 @@
 package gavehicles.interfaces;
 
-import gavehicles.abstracts.IndividualVehicle;
 import java.awt.Graphics;
 import java.awt.geom.Point2D;
 
 public interface Modelable {
-
+    
     public void step();
 
     public void init();
@@ -16,14 +15,12 @@ public interface Modelable {
 
     public void finish();
 
+    public double getPreyStimulusStrength(Point2D.Double sensorLocation);
+
     public void reset();
 
-    public double getPreyStimulusStrength(Point2D.Double sensorLocation, IndividualVehicle v);
-
-    public double getPredStimulusStrength(Point2D.Double sensorLocation, IndividualVehicle v);
+    public double getPredStimulusStrength(Point2D.Double sensorLocation);
 
     public void completeGeneration();
-
-    public double getFoodStimulusStrength(Point2D.Double sensorLocation, IndividualVehicle v);
-
+    
 }

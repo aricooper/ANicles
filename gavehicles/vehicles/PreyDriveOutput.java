@@ -18,20 +18,6 @@ public class PreyDriveOutput extends AbstractDriveOutput {
         this.setRightWheelOutput(r);
     }
 
-    
-    // Method to sum different DriveOutputs.
-    // Written by Paul Schot
-    @Override
-    public AbstractDriveOutput combine(AbstractDriveOutput o) {
-        PreyDriveOutput returnMe = new PreyDriveOutput();
-        double left = o.getLeftWheelOutput() + this.getLeftWheelOutput();
-        double right = o.getRightWheelOutput() + this.getRightWheelOutput();
-        returnMe.setLeftWheelOutput(left);
-        returnMe.setRightWheelOutput(right);
-        return returnMe;
-    }
-
-    @Override
     public String toString() {
         return "myD" + super.toString();
     }
